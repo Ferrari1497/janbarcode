@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)https://barcode-scanner-demo.netlify.app/ -->
+<html lang="en"><script type="text/javascript" class="__REQUESTLY__SCRIPT">(function(namespace) {
+  window[namespace] = window[namespace] || {};
+  window[namespace].responseRules = {};
+
+  let open = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function(method) {
+    this.addEventListener('readystatechange', function() {
+      if (this.readyState === 4 && window[namespace].responseRules.hasOwnProperty(this.responseURL)) {
+        const responseRule = window[namespace].responseRules[this.responseURL];
+        const {response, id} = responseRule;
+        const responseType = this.responseType;
+        let customResponse;
+
+        customResponse = response.type === 'code' ? responseRule.evaluator({
+            method,
+            url: this.responseURL,
+            requestHeaders: this.requestHeaders,
+            requestData: this.requestData,
+            responseType: this.responseType,
+            response: this.response
+          }) : response.value;
+
+        Object.defineProperty(this, 'response', {
+          get: function () {
+            if (response.type === 'static' && responseType === 'json') {
+              return JSON.parse(customResponse);
+            }
+            return customResponse;
+          }
+        });
+
+        if (responseType === '' || responseType === 'text') {
+          Object.defineProperty(this, 'responseText', {
+            get: function () {
+              return customResponse;
+            }
+          });
+        }
+
+        window.postMessage({
+          from: 'requestly',
+          type: 'response_rule_applied',
+          id
+        }, window.location.href);
+      }
+    }, false);
+    open.apply(this, arguments);
+  };
+
+  let send = XMLHttpRequest.prototype.send;
+  XMLHttpRequest.prototype.send = function(data) {
+    this.requestData = data;
+    send.apply(this, arguments);
+  };
+
+  let setRequestHeader = XMLHttpRequest.prototype.setRequestHeader;
+  XMLHttpRequest.prototype.setRequestHeader = function(header, value) {
+    this.requestHeaders = this.requestHeaders || {};
+    this.requestHeaders[header] = value;
+    setRequestHeader.apply(this, arguments);
+  }
+})('__REQUESTLY__')
+</script>
+<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<!--[if IE]><link rel="icon" href="/favicon.ico"><![endif]-->
+		<title>barcode_scanner</title>
+		<link href="./barcode_scanner_files/app.6aab40a0.css" rel="preload" as="style">
+		<link href="./barcode_scanner_files/app.e9d79b73.js.ダウンロード" rel="preload" as="script">
+		<link href="./barcode_scanner_files/chunk-vendors.9c9c8196.js.ダウンロード" rel="preload" as="script">
+		<link href="./barcode_scanner_files/app.6aab40a0.css" rel="stylesheet">
+		<link rel="icon" type="image/png" sizes="32x32" href="https://barcode-scanner-demo.netlify.app/img/icons/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="https://barcode-scanner-demo.netlify.app/img/icons/favicon-16x16.png">
+		<link rel="manifest" href="https://barcode-scanner-demo.netlify.app/manifest.json">
+		<meta name="theme-color" content="#4DBA87">
+		<meta name="apple-mobile-web-app-capable" content="no">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<meta name="apple-mobile-web-app-title" content="barcode_scanner">
+		<link rel="apple-touch-icon" href="https://barcode-scanner-demo.netlify.app/img/icons/apple-touch-icon-152x152.png">
+		<link rel="mask-icon" href="https://barcode-scanner-demo.netlify.app/img/icons/safari-pinned-tab.svg" color="#4DBA87">
+		<meta name="msapplication-TileImage" content="/img/icons/msapplication-icon-144x144.png">
+		<meta name="msapplication-TileColor" content="#000000">
+</head>
+<body><noscript><strong>We're sorry but barcode_scanner doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript>
+		<div id="app">
+				<h1>Barcode Scanner Demo</h1>
+				<p>scanでスキャンが始まります<br>(カメラを許可してください)</p>
+				<p>stopでスキャンを停止します</p>
+				<div class="hello">
+						<div id="cameraArea">
+								<!---->
+						</div>
+						<!---->
+						<p class="resultCode"></p><button>Scan</button><button aria-label="close"> Stop </button></div>
+		</div>
+		<script src="./barcode_scanner_files/chunk-vendors.9c9c8196.js.ダウンロード"></script>
+		<script src="./barcode_scanner_files/app.e9d79b73.js.ダウンロード"></script>
+</body>
+</html>
